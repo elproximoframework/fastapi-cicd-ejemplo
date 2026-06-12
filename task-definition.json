@@ -1,33 +1,110 @@
 {
-  "family": "fastapi-cicd-task",
+  "taskDefinitionArn": "arn:aws:ecs:eu-north-1:147885329467:task-definition/fastapi-cicd-task:1",
   "containerDefinitions": [
     {
       "name": "fastapi-api",
-      "image": "latest",
-      "cpu": 256,
-      "memory": 512,
+      "image": "147885329467.dkr.ecr.eu-north-1.amazonaws.com/fastapi-cicd-ejemplo:lastest",
+      "cpu": 0,
       "portMappings": [
         {
           "containerPort": 8000,
           "hostPort": 8000,
-          "protocol": "tcp"
+          "protocol": "tcp",
+          "name": "fastapi-api-8000-tcp",
+          "appProtocol": "http"
         }
       ],
       "essential": true,
+      "environment": [],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/fastapi-cicd-ejemplo",
+          "awslogs-group": "/ecs/fastapi-cicd-task",
+          "awslogs-create-group": "true",
           "awslogs-region": "eu-north-1",
           "awslogs-stream-prefix": "ecs"
+        },
+        "secretOptions": []
+      },
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8000/health/ready || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 10,
+        "startPeriod": 3
+      },
+      "systemControls": [],
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "arn:aws:secretsmanager:eu-north-1:147885329467:secret:prod/fastapi-cicd/config-mu8s63:DATABASE_URL::"
+        },
+        {
+          "name": "SECRET_KEY",
+          "valueFrom": "arn:aws:secretsmanager:eu-north-1:147885329467:secret:prod/fastapi-cicd/config-mu8s63:SECRET_KEY::"
         }
-      }
+      ]
     }
   ],
+  "family": "fastapi-cicd-task",
+  "executionRoleArn": "arn:aws:iam::147885329467:role/EcsExecutionRole",
+  "networkMode": "awsvpc",
+  "revision": 1,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+    },
+    {
+      "name": "ecs.capability.execution-role-awslogs"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "name": "ecs.capability.container-health-check"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "name": "ecs.capability.task-eni"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+    }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2",
+    "FARGATE",
+    "MANAGED_INSTANCES"
+  ],
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
   "requiresCompatibilities": [
     "FARGATE"
   ],
-  "networkMode": "awsvpc",
   "cpu": "256",
-  "memory": "512"
+  "memory": "2048",
+  "registeredAt": "2026-06-12T10:41:25.302Z",
+  "registeredBy": "arn:aws:iam::147885329467:root",
+  "enableFaultInjection": false,
+  "tags": []
 }
